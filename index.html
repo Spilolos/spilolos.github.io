@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduGhana — Learning for All</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#16a34a">
+  <style>
+    .card { transition: transform .25s, box-shadow .25s; }
+    .card:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,.12); }
+    .fade-in { animation: fade .6s ease-in both; }
+    @keyframes fade { from {opacity:0; transform: translateY(10px)} to {opacity:1; transform:none} }
+    .glass { background: rgba(255,255,255,.85); backdrop-filter: blur(8px); }
+    .hero::after { content:''; position:absolute; inset:0; background:linear-gradient(to right, rgba(22,163,74,.7), rgba(22,163,74,.2)); }
+  </style>
+</head>
+<body class="min-h-screen bg-gray-50">
+  <header class="bg-green-600 text-white shadow-md sticky top-0 z-30">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <a href="#" class="text-xl font-bold tracking-wide">EduGhana</a>
+      <nav class="hidden md:flex items-center gap-6">
+        <a href="#subjects" class="hover:underline">Subjects</a>
+        <a href="#quizzes" class="hover:underline">Quizzes</a>
+        <a href="#support" class="hover:underline">Support</a>
+        <a href="lessons.html" class="underline">Admin</a>
+        <button id="btnLogin" class="px-3 py-1 bg-white text-green-700 rounded">Login</button>
+      </nav>
+      <button class="md:hidden text-2xl">☰</button>
+    </div>
+  </header>
+
+  <section class="relative hero">
+    <img src="assets/hero.jpg" alt="Hero" class="w-full h-[360px] object-cover">
+    <div class="absolute inset-0 flex items-center">
+      <div class="container mx-auto px-4">
+        <div class="max-w-2xl glass rounded-2xl p-6 text-white">
+          <h1 class="text-3xl md:text-4xl font-extrabold mb-2 drop-shadow">Education Without Boundaries</h1>
+          <p class="opacity-95">Access quality lessons, rich quizzes, and teacher support — even offline. Download once, learn anywhere.</p>
+          <div class="mt-4 flex gap-3">
+            <a href="#subjects" class="px-5 py-2 bg-white text-green-700 rounded-full font-medium">Explore Subjects</a>
+            <a href="#quizzes" class="px-5 py-2 border-2 border-white text-white rounded-full font-medium">Take a Quiz</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="subjects" class="py-12 bg-white">
+    <div class="container mx-auto px-4">
+      <h2 class="text-2xl font-bold text-center mb-8">Explore Learning Materials</h2>
+      <div id="subjectsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </div>
+  </section>
+
+  <section id="quizzes" class="py-12 bg-gray-50">
+    <div class="container mx-auto px-4 max-w-5xl">
+      <div class="bg-white rounded-2xl shadow p-6">
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h3 class="text-lg font-semibold">Subject Quizzes</h3>
+          <div id="quizTabs" class="flex flex-wrap gap-2"></div>
+        </div>
+        <div id="qqBody" class="space-y-3"></div>
+        <div class="mt-4 flex justify-between items-center">
+          <button id="btnPrevQ" class="px-3 py-2 border rounded">Back</button>
+          <div class="flex items-center gap-2">
+            <span id="qqMeta" class="text-sm text-gray-600">—</span>
+            <div class="w-32 bg-gray-200 rounded-full h-2"><div id="qqBar" class="bg-green-500 h-2 rounded-full" style="width:0%"></div></div>
+          </div>
+          <button id="btnNextQ" class="px-3 py-2 bg-green-600 text-white rounded">Next</button>
+        </div>
+        <div id="qqResult" class="hidden mt-4 p-3 rounded bg-green-50 border border-green-200"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="support" class="py-12 bg-white">
+    <div class="container mx-auto px-4 grid md:grid-cols-2 gap-6 max-w-5xl">
+      <div class="bg-gradient-to-br from-green-50 to-white p-4 rounded-2xl border">
+        <h3 class="font-semibold mb-2">Message a Teacher</h3>
+        <textarea id="msgTeacher" class="w-full p-3 border rounded mb-2" rows="3" placeholder="Type your question"></textarea>
+        <div class="flex justify-end gap-2">
+          <button id="btnQueueMsg" class="px-3 py-2 border rounded">Queue</button>
+          <button id="btnSync" class="px-3 py-2 bg-green-600 text-white rounded">Sync</button>
+        </div>
+      </div>
+      <div class="bg-gradient-to-br from-blue-50 to-white p-4 rounded-2xl border">
+        <h3 class="font-semibold mb-2">Wikipedia Search (Save Offline)</h3>
+        <div class="flex gap-2">
+          <input id="wikiQ" class="flex-1 p-2 border rounded" placeholder="e.g., Kwame Nkrumah">
+          <button id="btnWiki" class="px-3 py-2 bg-green-600 text-white rounded">Search</button>
+        </div>
+        <div id="wikiRes" class="mt-3 text-sm text-gray-700"></div>
+      </div>
+    </div>
+  </section>
+
+  <div id="lessonsModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center z-40">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-3xl max-h-[80vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-3">
+        <h3 id="lmTitle" class="text-lg font-semibold"></h3>
+        <button id="lmClose" class="text-gray-500">✕</button>
+      </div>
+      <div id="lmList" class="space-y-3"></div>
+    </div>
+  </div>
+
+  <div id="authModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center">
+    <div class="bg-white rounded-2xl p-6 w-full max-w-md">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-semibold">Login</h3>
+        <button id="btnCloseAuth" class="text-gray-500">✕</button>
+      </div>
+      <input id="authEmail" type="email" placeholder="Email" class="w-full p-2 border rounded mb-2">
+      <input id="authPass" type="password" placeholder="Password" class="w-full p-2 border rounded mb-4">
+      <div class="flex justify-between">
+        <button id="btnDoLogin" class="px-4 py-2 bg-green-600 text-white rounded">Login (demo)</button>
+      </div>
+      <p class="text-xs text-gray-500 mt-3">Use an email ending with <code>@admin.test</code> to get admin role.</p>
+    </div>
+  </div>
+
+  <footer class="bg-gray-900 text-white py-8 mt-12">
+    <div class="container mx-auto px-4 flex justify-between">
+      <p class="text-sm opacity-75">© 2025 EduGhana</p>
+      <a href="lessons.html" class="underline">Admin</a>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
